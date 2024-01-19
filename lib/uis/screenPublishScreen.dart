@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iotflutter/mqtt/MqttConnection.dart';
-import 'package:mqtt_client/mqtt_server_client.dart';
+import 'package:mqtt5_client/mqtt5_server_client.dart';
 
 class MqttPublishScreen extends StatefulWidget {
   const MqttPublishScreen({Key? key}) : super(key: key);
@@ -53,7 +53,7 @@ class _MqttPublishScreenState extends State<MqttPublishScreen> {
               onPressed: mqttController == null
                   ? null
                   : () {
-                      publishTopic(mqttController!, 'test', 'test');
+                      publishTopic(mqttController!, 'test', 'inTopic');
                     },
               child: const Text('Publicar Mensaje'),
             ),

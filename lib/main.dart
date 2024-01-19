@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iotflutter/mqtt/MqttConnection.dart';
 import 'package:iotflutter/uis/screenPublishScreen.dart';
-import 'package:mqtt_client/mqtt_server_client.dart';
-import 'package:uuid/uuid.dart';
 
 void main() {
   runApp(MyApp());
