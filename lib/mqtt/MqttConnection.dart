@@ -13,13 +13,6 @@ Future<MqttServerClient> connect() async {
   client.keepAlivePeriod = 20;
   // client.setProtocolV311();
   client.logging(on: false);
-
-  // ByteData rootCA =
-  //     await rootBundle.load("assets/credentials/AmazonRootCA1.pem");
-  // ByteData deviceCert =
-  //     await rootBundle.load('assets/credentials/Certificate.pem.crt');
-  // ByteData privateKey =
-  //     await rootBundle.load('assets/credentials/Private.pem.key');
   ByteData rootCA = await rootBundle.load("assets/AmazonRootCA1.pem");
   ByteData deviceCert = await rootBundle.load('assets/Certificate.pem.crt');
   ByteData privateKey = await rootBundle.load('assets/Private.pem.key');
