@@ -1,0 +1,69 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_hsvcolor_picker/flutter_hsvcolor_picker.dart';
+import 'package:iotflutter/mqtt/MqttConnection.dart';
+import 'package:mqtt5_client/mqtt5_server_client.dart';
+
+class MqttPublishScreenPicker extends StatefulWidget {
+  const MqttPublishScreenPicker({Key? key}) : super(key: key);
+  @override
+  _MqttPublishScreenPickerState createState() =>
+      _MqttPublishScreenPickerState();
+}
+
+class _MqttPublishScreenPickerState extends State<MqttPublishScreenPicker> {
+  MqttServerClient? mqttController;
+  TextEditingController messageController = TextEditingController();
+  bool isConnected = false;
+  final _colorNotifier = ValueNotifier(Colors.green);
+
+  @override
+  void initState() {
+    super.initState();
+    connect().then((value) {
+      setState(() {
+        mqttController = value;
+        isConnected = true;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    if (isConnected) {
+      mqttController!.disconnect();
+    }
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text('MQTT Publish Screen'),
+        ),
+        body: Center(
+          child: Padding(
+            padding: EdgeInsets.all(30),
+            child: Container(
+              decoration: BoxDecoration(color: Colors.white, boxShadow: [
+                BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3)),
+              ]),
+              child: Padding(
+                padding: EdgeInsets.all(20),
+                child: ValueListenableBuilder<Color>(
+                  valueListenable: _colorNotifier,
+                  builder: (_, color, __) {
+                    return ColorPicker(
+                        color: color, onChanged: (value) => color = value);
+                  },
+                ),
+              ),
+            ),
+          ),
+        ));
+  }
+}
