@@ -1,20 +1,19 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:iotflutter/models/sensor.dart';
+import 'package:iotflutter/models/image.dart';
 import 'package:http/http.dart' as http;
-import 'package:iotflutter/widgets/cardDataSensor.dart';
+import 'package:iotflutter/widgets/cardDataImage.dart';
 
-class ScreenViewDataSensor extends StatelessWidget {
-  const ScreenViewDataSensor({super.key});
+class ScreenViewDataImage extends StatelessWidget {
+  const ScreenViewDataImage({super.key});
 
-  Future<List<DataSensor>> fetchData() async {
-    var url =
-        Uri.https('brthu4f4ef.execute-api.us-east-2.amazonaws.com', 'items');
-    final response = await http.get(url);
+  Future<List<DataImage>> fetchData() async {
+    var url = 'https://brthu4f4ef.execute-api.us-east-2.amazonaws.com/images';
+    final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       final List<dynamic> jsonResponse = json.decode(response.body);
-      return jsonResponse.map((data) => DataSensor.fromJson(data)).toList();
+      return jsonResponse.map((data) => DataImage.fromJson(data)).toList();
     } else {
       throw Exception('Failed to load data');
     }
@@ -24,17 +23,14 @@ class ScreenViewDataSensor extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('DataSensor from API'),
-        ),
-        body: FutureBuilder<List<DataSensor>>(
+        body: FutureBuilder<List<DataImage>>(
           future: fetchData(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return ListView.builder(
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
-                  return CardDataSensor(data: snapshot.data![index]);
+                  return CardDataImage(data: snapshot.data![index]);
                 },
               );
             } else if (snapshot.hasError) {

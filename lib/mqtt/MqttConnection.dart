@@ -7,8 +7,10 @@ import 'package:mqtt5_client/mqtt5_server_client.dart';
 Future<MqttServerClient> connect() async {
   // final client = MqttServerClient.withPort(
   //     "ag20q59pra3c4-ats.iot.us-east-1.amazonaws.com", '1', 8883);
+  // final client = MqttServerClient.withPort(
+  //     "a34bt8gk372w9w-ats.iot.us-east-2.amazonaws.com", "1", 8883);
   final client = MqttServerClient.withPort(
-      "a34bt8gk372w9w-ats.iot.us-east-2.amazonaws.com", "1", 8883);
+      "ag20q59pra3c4-ats.iot.us-east-1.amazonaws.com", '1', 8883);
   client.secure = true;
   client.keepAlivePeriod = 20;
   // client.setProtocolV311();
@@ -26,31 +28,38 @@ Future<MqttServerClient> connect() async {
 
   try {
     await client.connect();
-    print('conectado');
     //subscribeToTopic(client, 'TOPIC_RONY');
   } catch (e) {
-    print('Exception: $e');
     client.disconnect();
     throw Exception('Error connecting to MQTT server');
-  }
-
-  if (client.connectionStatus?.state == MqttConnectionState.connected) {
-    print("Se establecio la coneccion MQTT");
-  } else {
-    print("No se establecio la conexion MQTT");
   }
 
   return client;
 }
 
+// funcion para publicar a un topico
 void publishTopic(MqttServerClient client, String message, String topic) {
   final MqttPayloadBuilder builder = MqttPayloadBuilder();
   builder.addString(message);
   try {
-    int valueClient =
-        client.publishMessage(topic, MqttQos.atLeastOnce, builder.payload!);
-    print('Message published to topic $topic, number $valueClient');
+    client.publishMessage(topic, MqttQos.atLeastOnce, builder.payload!);
   } catch (e) {
-    print('Error publishing message: $e');
+    print(e);
   }
 }
+
+// funcion para subscribirdr a un topico
+// void subscribeToTopic(MqttServerClient client, String topic) {
+//   try {
+//     client.subscribe(topic, MqttQos.atLeastOnce);
+//     client.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {
+//       final MqttPublishMessage recMess = c[0].payload as MqttPublishMessage;
+//       final String pt =
+//           MqttUtilities.bytesToStringAsString(recMess.payload.message!);
+//       print(
+//           'GOT A MESSAGE:::::::::::::::::::::::::: ------------ $pt from topic $topic');
+//     });
+//   } catch (e) {
+//     print('Exception during subscribtion: $e');
+//   }
+// }
